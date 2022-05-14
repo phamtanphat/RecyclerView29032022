@@ -1,5 +1,7 @@
 package com.example.recyclerview29032022;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -86,5 +88,11 @@ public class FoodModel {
 
     public void setCloseTime(Date closeTime) {
         this.closeTime = closeTime;
+    }
+
+    public static List<FoodModel> getMock(){
+        return new ArrayList<>(Arrays.asList(
+                new FoodModel(R.drawable.img_cheesecake,"Uncle Lu's Cheesecake - Sư Vạn Hạnh","652 Sư Vạn Hạnh, P. 12, Quận 10, TP. HCM",Arrays.asList(Category.FAMILY,Category.GROUP),"Cả ngày - 15%",10.1f,Utils.createDateForHour(8),Utils.createDateForHour(21))
+        ));
     }
 }
