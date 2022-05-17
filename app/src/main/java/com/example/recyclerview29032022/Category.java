@@ -5,7 +5,9 @@ public enum Category {
     SHOP_ONLINE("Shop online"),
     FAMILY("Gia đình"),
     GROUP("Hội nhóm"),
-    BIRTHDAY("Sinh nhật");
+    BIRTHDAY("Sinh nhật"),
+    BUFFET("Buffet"),
+    STREET_FOOD("Quán vỉa hè");
 
     private String text;
 
