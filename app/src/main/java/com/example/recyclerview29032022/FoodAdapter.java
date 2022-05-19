@@ -47,7 +47,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         ImageView img;
         TextView txtTimeOpen, txtName, txtAddress, txtCategory, txtDiscount, txtDistance;
         StringBuilder textCategory;
-        SimpleDateFormat simpleDateFormat;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,8 +85,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
             Calendar calendar = Calendar.getInstance();
             if (calendar.before(foodModel.getOpenTime()) || calendar.after(foodModel.getCloseTime())) {
                 txtTimeOpen.setVisibility(View.VISIBLE);
-                simpleDateFormat = new SimpleDateFormat("HH:mm");
-                txtTimeOpen.setText(String.format("Đóng cửa\nMở cửa vào lúc %s", simpleDateFormat.format(foodModel.getOpenTime())));
+                txtTimeOpen.setText(String.format("Đóng cửa\nMở cửa vào lúc %s", Utils.formatHour(foodModel.getOpenTime())));
             }else{
                 txtTimeOpen.setVisibility(View.GONE);
             }
