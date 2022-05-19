@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -47,6 +46,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         ImageView img;
         TextView txtTimeOpen, txtName, txtAddress, txtCategory, txtDiscount, txtDistance;
         StringBuilder textCategory;
+        int hourCurrent = 0;
+        int minusCurrent = 0;
+        int hourOpenModel = 0;
+        int minusOpenModel = 0;
+        int hourCloseModel = 0;
+        int minusCloseModel = 0;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,16 +69,18 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
             img.setImageResource(foodModel.getImage());
             txtName.setText(foodModel.getName());
             txtAddress.setText(foodModel.getAddress());
-            txtDistance.setText(String.format(">%f", foodModel.getDistance()));
+            txtDistance.setText(String.format(">%.1f km", foodModel.getDistance()));
             if (foodModel.getCategoryList().size() > 0) {
                 textCategory = new StringBuilder();
                 for (int i = 0; i < foodModel.getCategoryList().size(); i++) {
                     if (i == foodModel.getCategoryList().size() - 1) {
-                        textCategory.append(foodModel.getCategoryList().get(i).getText()).append(" - ");
-                    } else {
                         textCategory.append(foodModel.getCategoryList().get(i).getText());
+                    } else {
+                        textCategory.append(foodModel.getCategoryList().get(i).getText()).append(" - ");
+                        ;
                     }
                 }
+                txtCategory.setText(textCategory.toString());
             }
             if (!foodModel.getDiscount().isEmpty()) {
                 txtDiscount.setVisibility(View.VISIBLE);
@@ -83,10 +90,16 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
                 txtDiscount.setVisibility(View.GONE);
             }
             Calendar calendar = Calendar.getInstance();
-            if (calendar.before(foodModel.getOpenTime()) || calendar.after(foodModel.getCloseTime())) {
+            hourCurrent = calendar.get(Calendar.HOUR_OF_DAY);
+            minusCurrent = calendar.get(Calendar.MINUTE);
+            hourOpenModel = Utils.milliToHour(foodModel.getOpenTime());
+            minusOpenModel = Utils.milliToMinus(foodModel.getOpenTime());
+            hourCloseModel = Utils.milliToHour(foodModel.getOpenTime());
+            minusCloseModel = Utils.milliToMinus(foodModel.getOpenTime());
+            if ((hourCurrent < hourOpenModel && minusCurrent < minusOpenModel) || (hourCurrent >= hourCloseModel && minusCurrent >= minusCloseModel)) {
                 txtTimeOpen.setVisibility(View.VISIBLE);
-                txtTimeOpen.setText(String.format("Đóng cửa\nMở cửa vào lúc %s", Utils.formatHour(foodModel.getOpenTime())));
-            }else{
+                txtTimeOpen.setText(String.format("Đóng cửa\nMở cửa vào lúc %s", Utils.formatTimeToString(foodModel.getOpenTime())));
+            } else {
                 txtTimeOpen.setVisibility(View.GONE);
             }
         }
