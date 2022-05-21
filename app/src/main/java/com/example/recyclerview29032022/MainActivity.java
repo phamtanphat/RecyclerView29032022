@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         totalItem = totalPage = currentItem = currentPage = 0;
         rcvFood = findViewById(R.id.recyclerView);
         listFoods = FoodModel.getMock();
+        listFoods.add(null);
         foodAdapter = new FoodAdapter(listFoods);
         rcvFood.setAdapter(foodAdapter);
         rcvFood.setHasFixedSize(true);

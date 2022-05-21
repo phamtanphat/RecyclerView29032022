@@ -12,26 +12,47 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Calendar;
 import java.util.List;
 
-public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
+public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<FoodModel> listFoods;
+
+    int FOOD_ITEM_TYPE = 0;
+    int LOADING_TYPE = 1;
+
+    boolean isLoading = false;
 
     public FoodAdapter(List<FoodModel> listFoods) {
         this.listFoods = listFoods;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (listFoods.get(position) == null) {
+            return LOADING_TYPE;
+        }
+        return FOOD_ITEM_TYPE;
+    }
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.layout_item_food, parent, false);
-        return new ViewHolder(view);
+        View view;
+        if (viewType == FOOD_ITEM_TYPE) {
+            view = layoutInflater.inflate(R.layout.layout_item_food, parent, false);
+            return new FoodViewHolder(view);
+        }else{
+            view = layoutInflater.inflate(R.layout.layout_item_loading, parent, false);
+            return new LoadingViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        FoodModel foodModel = listFoods.get(position);
-        holder.bind(foodModel);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof FoodViewHolder){
+            FoodModel foodModel = listFoods.get(position);
+            ((FoodViewHolder) holder).bind(foodModel);
+        }
     }
 
     @Override
@@ -42,18 +63,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         return listFoods.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class FoodViewHolder extends RecyclerView.ViewHolder {
         ImageView img;
         TextView txtTimeOpen, txtName, txtAddress, txtCategory, txtDiscount, txtDistance;
         StringBuilder textCategory;
-        int hourCurrent = 0;
-        int minusCurrent = 0;
-        int hourOpenModel = 0;
-        int minusOpenModel = 0;
-        int hourCloseModel = 0;
-        int minusCloseModel = 0;
+        int hourCurrent, minusCurrent, hourOpenModel, minusOpenModel, hourCloseModel, minusCloseModel;
 
-        public ViewHolder(@NonNull View itemView) {
+        public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.imageViewFood);
             txtTimeOpen = itemView.findViewById(R.id.textViewOpen);
@@ -62,6 +78,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
             txtCategory = itemView.findViewById(R.id.textViewCategory);
             txtDiscount = itemView.findViewById(R.id.textViewDiscount);
             txtDistance = itemView.findViewById(R.id.textViewDistance);
+            hourCurrent = minusCurrent = hourOpenModel = minusOpenModel = hourCloseModel = minusCloseModel = 0;
 
         }
 
@@ -97,13 +114,20 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
             hourCloseModel = Utils.milliToHour(foodModel.getCloseTime());
             minusCloseModel = Utils.milliToMinus(foodModel.getCloseTime());
             if ((hourCurrent < hourOpenModel) || (hourCurrent >= hourCloseModel)) {
-                if ((minusCurrent < minusOpenModel) || (minusCurrent >= minusCloseModel)){
+                if ((minusCurrent < minusOpenModel) || (minusCurrent >= minusCloseModel)) {
                     txtTimeOpen.setVisibility(View.VISIBLE);
                     txtTimeOpen.setText(String.format("Đóng cửa\nMở cửa vào lúc %s", Utils.formatTimeToString(foodModel.getOpenTime())));
                 }
             } else {
                 txtTimeOpen.setVisibility(View.GONE);
             }
+        }
+    }
+
+    class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        public LoadingViewHolder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 }
