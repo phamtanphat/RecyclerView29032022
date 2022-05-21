@@ -11,7 +11,7 @@ public class Utils {
     }
 
     public static int milliToMinus(long time) {
-        return (int) ((time / 1000) % 60);
+        return (int) ((time / 60000) % 60);
     }
 
     public static String formatTimeToString(long time) {

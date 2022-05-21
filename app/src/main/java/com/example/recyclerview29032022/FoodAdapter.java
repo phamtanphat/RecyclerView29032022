@@ -94,11 +94,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
             minusCurrent = calendar.get(Calendar.MINUTE);
             hourOpenModel = Utils.milliToHour(foodModel.getOpenTime());
             minusOpenModel = Utils.milliToMinus(foodModel.getOpenTime());
-            hourCloseModel = Utils.milliToHour(foodModel.getOpenTime());
-            minusCloseModel = Utils.milliToMinus(foodModel.getOpenTime());
-            if ((hourCurrent < hourOpenModel && minusCurrent < minusOpenModel) || (hourCurrent >= hourCloseModel && minusCurrent >= minusCloseModel)) {
-                txtTimeOpen.setVisibility(View.VISIBLE);
-                txtTimeOpen.setText(String.format("Đóng cửa\nMở cửa vào lúc %s", Utils.formatTimeToString(foodModel.getOpenTime())));
+            hourCloseModel = Utils.milliToHour(foodModel.getCloseTime());
+            minusCloseModel = Utils.milliToMinus(foodModel.getCloseTime());
+            if ((hourCurrent < hourOpenModel) || (hourCurrent >= hourCloseModel)) {
+                if ((minusCurrent < minusOpenModel) || (minusCurrent >= minusCloseModel)){
+                    txtTimeOpen.setVisibility(View.VISIBLE);
+                    txtTimeOpen.setText(String.format("Đóng cửa\nMở cửa vào lúc %s", Utils.formatTimeToString(foodModel.getOpenTime())));
+                }
             } else {
                 txtTimeOpen.setVisibility(View.GONE);
             }
