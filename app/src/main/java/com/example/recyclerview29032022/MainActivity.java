@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void event() {
-        totalItem = 30;
-        totalPage = totalItem / 10;
+        totalItem = 21;
+        totalPage = (int) Math.ceil((float) totalItem / 10);
 
         rcvFood.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 currentItem = listFoods.size() - 1;
-                currentPage = totalPage - ((totalItem - currentItem) / 10);
+                currentPage = (int) (totalPage - (Math.ceil((double) (totalItem - currentItem) / 10)));
 
                 if (isLoading || currentPage >= totalPage){
                     return;
