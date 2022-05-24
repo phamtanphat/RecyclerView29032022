@@ -15,11 +15,8 @@ import java.util.List;
 public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<FoodModel> listFoods;
-
     int FOOD_ITEM_TYPE = 0;
     int LOADING_TYPE = 1;
-
-    boolean isLoading = false;
 
     public FoodAdapter(List<FoodModel> listFoods) {
         this.listFoods = listFoods;
